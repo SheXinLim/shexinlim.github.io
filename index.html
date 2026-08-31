@@ -1,673 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>She Xin (Daisy) Lim — Full-Stack Software Engineer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper:#2E2A22;
-    --paper-dim: rgba(46,42,34,0.72);
-    --paper-faint: rgba(46,42,34,0.48);
-    --amber:#B9683E;
-    --mint:#3F7A72;
-    --glass-bg: rgba(255,251,243,0.55);
-    --glass-border: rgba(46,42,34,0.14);
-    --display:'Fraunces', serif;
-    --body:'Inter', sans-serif;
-    --mono:'JetBrains Mono', monospace;
-    --sky-top:#EDE4D3;
-    --sky-mid:#D9C2AE;
-    --sky-horizon:#A9C3B6;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{animation:none !important; transition-duration:0.01ms !important;}
-  }
-  body{
-    font-family:var(--body);
-    color:var(--paper);
-    line-height:1.65;
-    overflow-x:hidden;
-    background:#EDE4D3;
-  }
-  a{color:inherit;}
-  ::selection{background:var(--amber); color:#FBF6EC;}
-  :focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isometric Sushi Concept</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  .sky-bg{
-    position:fixed; inset:0; z-index:-2;
-    background:linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-horizon) 100%);
-    transition:background 0.1s linear;
-  }
-  .sky-haze{
-    position:fixed; inset:0; z-index:-1;
-    background:radial-gradient(ellipse at 50% 100%, rgba(185,104,62,0.10), transparent 60%);
-    pointer-events:none;
-  }
+        body {
+            background-color: #b5d3e7; /* Soft pastel blue background */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-  .wrap{ max-width:1160px; margin:0 auto; padding:0 28px; position:relative; z-index:2; }
+        /* Top-left brand logo */
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
 
-  /* ---------- Chapter side nav ---------- */
-  .chapter-nav{
-    position:fixed;
-    right:26px; top:50%;
-    transform:translateY(-50%);
-    z-index:50;
-    display:flex; flex-direction:column; gap:16px;
-    align-items:center;
-  }
-  .chapter-nav button{
-    width:10px; height:10px; border-radius:50%;
-    background:transparent;
-    border:1.5px solid var(--paper-faint);
-    cursor:pointer;
-    padding:0;
-    transition:all .3s ease;
-  }
-  .chapter-nav button.active{
-    background:var(--amber);
-    border-color:var(--amber);
-    box-shadow:0 0 10px var(--amber);
-    transform:scale(1.3);
-  }
-  @media (max-width:800px){ .chapter-nav{ display:none; } }
+        /* Scene container with isometric perspective */
+        .scene {
+            position: relative;
+            width: 700px;
+            height: 500px;
+            transform: perspective(1000px) rotateX(55deg) rotateZ(-40deg);
+            transform-style: preserve-3d;
+        }
 
-  /* ---------- Section shell ---------- */
-  section{ position:relative; padding:150px 0 130px; overflow:hidden; }
-  .scene{ position:absolute; inset:0; z-index:0; pointer-events:none; }
-  .scene svg{ position:absolute; bottom:0; left:0; width:100%; height:auto; }
+        /* Main UI Interface Window */
+        .browser-window {
+            position: absolute;
+            width: 520px;
+            height: 340px;
+            background: rgba(235, 243, 249, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 6px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 30px 1fr 1fr;
+            gap: 15px;
+        }
 
-  .content{ position:relative; z-index:2; }
+        /* Browser Header Dots */
+        .browser-header {
+            grid-column: span 3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            padding-bottom: 8px;
+        }
 
-  .chapter-tag{
-    font-family:var(--mono);
-    font-size:12px;
-    letter-spacing:0.16em;
-    text-transform:uppercase;
-    color:var(--mint);
-    margin-bottom:22px;
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-  }
-  .chapter-tag::before{
-    content:'';
-    width:22px; height:1px;
-    background:var(--mint);
-  }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
 
-  .glass{
-    background:var(--glass-bg);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border:1px solid var(--glass-border);
-    border-radius:10px;
-  }
+        .lines {
+            width: 14px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            margin-left: 6px;
+            box-shadow: 0 4px 0 rgba(255, 255, 255, 0.8);
+        }
 
-  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease; }
-  .reveal.in{ opacity:1; transform:translateY(0); }
+        /* Content Cards inside the UI */
+        .card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 10px;
+        }
 
-  /* particles */
-  .particles-field{ position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none; }
-  .mote{
-    position:absolute;
-    border-radius:50%;
-    animation:float-mote linear infinite;
-    opacity:0.7;
-  }
-  @keyframes float-mote{
-    0%{ transform:translateY(0) translateX(0); opacity:0; }
-    10%{ opacity:0.85; }
-    90%{ opacity:0.6; }
-    100%{ transform:translateY(-120px) translateX(14px); opacity:0; }
-  }
+        .card-lines {
+            width: 60%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 2px;
+            margin-top: 12px;
+            position: relative;
+        }
 
-  /* ---------- HERO / PROLOGUE ---------- */
-  .hero{ min-height:100svh; display:flex; align-items:flex-end; padding-bottom:100px; padding-top:120px; }
-  .hero-caption{
-    padding:20px 26px;
-    max-width:380px;
-    margin-bottom:36px;
-  }
-  .hero-caption p{ font-size:14px; color:var(--paper-dim); }
-  .hero h1{
-    font-family:var(--display);
-    font-weight:500;
-    font-size:clamp(2.6rem, 7.6vw, 6rem);
-    line-height:0.98;
-    letter-spacing:-0.01em;
-  }
-  .hero h1 em{
-    font-style:italic;
-    font-weight:500;
-    color:var(--amber);
-    display:block;
-  }
-  .hero-role{
-    font-family:var(--mono);
-    font-size:clamp(13px,1.6vw,16px);
-    color:var(--paper-dim);
-    margin-top:20px;
-    max-width:46ch;
-  }
-  .scroll-cue{
-    position:absolute; bottom:34px; left:28px;
-    font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase;
-    color:var(--paper-faint);
-    display:flex; align-items:center; gap:10px;
-    z-index:3;
-  }
-  .scroll-cue .line{ width:1px; height:38px; background:linear-gradient(var(--paper-faint), transparent); animation:cue-move 2.2s ease-in-out infinite; }
-  @keyframes cue-move{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
+        .card-lines::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 40%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+        }
 
-  /* ---------- ABOUT / CH.01 ---------- */
-  .about-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:50px; align-items:start; }
-  h2.chapter-title{
-    font-family:var(--display);
-    font-weight:500;
-    font-size:clamp(2rem, 4.2vw, 3.2rem);
-    margin-bottom:34px;
-  }
-  .about-text{ padding:34px; }
-  .about-text p{ color:var(--paper-dim); font-size:16.5px; max-width:56ch; }
-  .about-text p + p{ margin-top:16px; }
+        /* Isometric Ship */
+        .ship {
+            position: absolute;
+            top: 20px;
+            left: 120px;
+            width: 120px;
+            height: 180px;
+            transform: translateZ(60px);
+            transform-style: preserve-3d;
+        }
 
-  .spec-sheet{ padding:6px; }
-  .spec-row{ display:grid; grid-template-columns:110px 1fr; border-bottom:1px solid rgba(255,255,255,0.09); }
-  .spec-row:last-child{ border-bottom:none; }
-  .spec-key{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--paper-faint); padding:16px; }
-  .spec-val{ padding:16px 16px 16px 0; font-size:14px; color:var(--paper); }
+        .hull {
+            position: absolute;
+            bottom: 0;
+            width: 110px;
+            height: 70px;
+            background: #e8726d; /* Coral red */
+            border-radius: 0 0 20px 10px;
+            transform: skewX(-20deg);
+            box-shadow: -10px 10px 20px rgba(0,0,0,0.1);
+        }
 
-  /* ---------- SKILLS / CH.02 ---------- */
-  .stack{ display:flex; flex-direction:column; gap:16px; }
-  .ridge-layer{
-    padding:26px 28px;
-    display:grid;
-    grid-template-columns:210px 1fr;
-    gap:22px;
-    align-items:start;
-    border-left:3px solid var(--mint);
-  }
-  .ridge-layer:nth-child(2){ border-left-color:var(--amber); }
-  .ridge-layer:nth-child(3){ border-left-color:var(--mint); }
-  .ridge-layer:nth-child(4){ border-left-color:var(--amber); }
-  .ridge-name{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--paper-faint); }
-  .ridge-name b{ display:block; font-family:var(--display); font-weight:500; font-size:20px; color:var(--paper); text-transform:none; letter-spacing:0; margin-top:8px; }
-  .pills{ display:flex; flex-wrap:wrap; gap:8px; }
-  .pill{ font-family:var(--mono); font-size:12px; padding:6px 12px; border:1px solid var(--glass-border); color:var(--paper-dim); border-radius:20px; }
+        .deck {
+            position: absolute;
+            bottom: 45px;
+            left: 10px;
+            width: 90px;
+            height: 50px;
+            background: #f4f6f8;
+            transform: skewX(-20deg);
+            background-image: repeating-linear-gradient(0deg, #e1e7ec, #e1e7ec 2px, transparent 2px, transparent 6px);
+        }
 
-  /* ---------- WORK / CH.03 ---------- */
-  .projects{ display:flex; flex-direction:column; gap:22px; }
-  .project{ padding:30px; cursor:pointer; }
-  .project-top{ display:flex; justify-content:space-between; align-items:center; gap:20px; }
-  .project-title{ display:flex; align-items:center; gap:12px; }
-  .status-dot{ width:9px; height:9px; border-radius:50%; background:var(--amber); box-shadow:0 0 8px var(--amber); animation:blink 2.4s ease-in-out infinite; flex:none; }
-  @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
-  .project h3{ font-family:var(--display); font-weight:500; font-size:21px; }
-  .project-stack{ font-family:var(--mono); font-size:12px; color:var(--mint); margin-top:6px; }
-  .project-toggle{ font-family:var(--mono); font-size:14px; color:var(--paper-faint); transition:transform .3s ease; }
-  .project.open .project-toggle{ transform:rotate(45deg); color:var(--amber); }
-  .project-diagram{ display:flex; align-items:center; gap:0; margin-top:20px; flex-wrap:wrap; }
-  .svc{ font-family:var(--mono); font-size:11px; padding:7px 12px; border:1px solid var(--glass-border); border-radius:20px; color:var(--paper-dim); }
-  .svc-arrow{ font-family:var(--mono); color:var(--paper-faint); padding:0 8px; }
-  .project-body{ max-height:0; overflow:hidden; transition:max-height .45s ease; }
-  .project.open .project-body{ max-height:640px; }
-  .project-body-inner{ padding-top:22px; }
-  .project-body ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
-  .project-body li{ color:var(--paper-dim); font-size:14.5px; padding-left:18px; position:relative; }
-  .project-body li::before{ content:'→'; position:absolute; left:0; top:0; color:var(--mint); font-family:var(--mono); }
-  .metrics{ display:flex; gap:30px; margin-top:20px; flex-wrap:wrap; }
-  .metric b{ display:block; font-family:var(--display); font-weight:500; font-size:26px; color:var(--amber); }
-  .metric span{ font-family:var(--mono); font-size:10.5px; color:var(--paper-faint); text-transform:uppercase; letter-spacing:.06em; }
+        .cabin {
+            position: absolute;
+            bottom: 75px;
+            left: 20px;
+            width: 60px;
+            height: 70px;
+            background: #ffffff;
+            border-radius: 2px;
+        }
 
-  /* ---------- EXPERIENCE / CH.04 ---------- */
-  .timeline{ position:relative; padding-left:38px; }
-  .timeline::before{ content:''; position:absolute; left:5px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--mint), var(--amber)); opacity:.55; }
-  .tl-item{ position:relative; padding-bottom:44px; padding:22px 24px 44px 26px; }
-  .tl-item:last-child{ padding-bottom:22px; }
-  .tl-item::before{ content:''; position:absolute; left:-36px; top:26px; width:12px; height:12px; border-radius:50%; background:#EDE4D3; border:2px solid var(--mint); }
-  .tl-when{ font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--paper-faint); margin-bottom:6px; }
-  .tl-role{ font-family:var(--display); font-weight:500; font-size:19px; margin-bottom:4px; }
-  .tl-org{ font-family:var(--mono); font-size:12.5px; color:var(--mint); margin-bottom:12px; }
-  .tl-item p, .tl-item ul{ color:var(--paper-dim); font-size:14.5px; max-width:62ch; }
-  .tl-item ul{ list-style:none; display:flex; flex-direction:column; gap:8px; }
-  .tl-item li{ padding-left:18px; position:relative; }
-  .tl-item li::before{ content:'—'; position:absolute; left:0; color:var(--paper-faint); }
+        .flagpole {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            width: 2px;
+            height: 25px;
+            background: #ffffff;
+        }
 
-  .badges{ display:flex; flex-wrap:wrap; gap:12px; margin-top:50px; }
-  .badge{ padding:12px 16px; display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:12px; color:var(--paper-dim); border-radius:20px; }
-  .badge .badge-mark{ color:var(--amber); }
+        .flag {
+            position: absolute;
+            top: -15px;
+            left: 32px;
+            width: 12px;
+            height: 8px;
+            background: #e8726d;
+        }
 
-  /* ---------- CONTACT / EPILOGUE ---------- */
-  .contact-inner{ padding:44px; max-width:640px; }
-  .contact h2{ font-family:var(--display); font-weight:500; font-size:clamp(2rem, 5vw, 3.4rem); max-width:16ch; margin-bottom:30px; }
-  .contact-links{ display:flex; flex-wrap:wrap; gap:14px; }
-  .contact-link{ font-family:var(--mono); font-size:14px; padding:14px 20px; text-decoration:none; color:var(--paper); border:1px solid var(--glass-border); border-radius:24px; transition:border-color .2s ease, color .2s ease, transform .2s ease; display:flex; align-items:center; gap:10px; }
-  .contact-link:hover{ border-color:var(--amber); color:var(--amber); transform:translateY(-2px); }
+        /* Minimalist Food Graphics (CSS shapes) */
+        /* Bowl */
+        .bowl {
+            width: 30px;
+            height: 18px;
+            background: #2b303a;
+            border-radius: 0 0 15px 15px;
+            position: relative;
+        }
+        .bowl::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 2px;
+            width: 26px;
+            height: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
 
-  footer{ position:relative; z-index:2; padding:40px 0 60px; font-family:var(--mono); font-size:11px; color:var(--paper-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+        /* Nigiri / Sushi pieces */
+        .nigiri-pink {
+            width: 36px;
+            height: 18px;
+            background: #f29c99;
+            border-radius: 4px;
+            box-shadow: 0 3px 0 #d97875;
+            position: relative;
+        }
+        .nigiri-pink::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 6px; right: 6px; height: 100%;
+            background: repeating-linear-gradient(90deg, transparent, transparent 4px, #e8726d 4px, #e8726d 6px);
+            border-radius: 2px;
+        }
 
-  @media (max-width:860px){
-    .about-grid{ grid-template-columns:1fr; }
-    .ridge-layer{ grid-template-columns:1fr; gap:14px; }
-    section{ padding:110px 0 90px; }
-  }
-</style>
+        .maki-roll {
+            width: 32px;
+            height: 24px;
+            background: #2b303a;
+            border-radius: 4px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 0 #14171c;
+        }
+        .maki-roll::before {
+            content: '';
+            width: 18px;
+            height: 12px;
+            background: #f4f6f8;
+            border-radius: 2px;
+        }
+
+        .nigiri-yellow {
+            width: 36px;
+            height: 18px;
+            background: #f7e47b;
+            border-radius: 4px;
+            box-shadow: 0 3px 0 #d9c455;
+            position: relative;
+        }
+        .nigiri-yellow::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 12px; width: 10px; height: 100%;
+            background: #2b303a;
+        }
+
+        /* Floating background plants/decorations */
+        .plant {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background: #e8726d;
+            clip-path: polygon(50% 0%, 100% 30%, 70% 30%, 100% 70%, 50% 100%, 0% 70%, 30% 30%, 0% 30%);
+        }
+
+        .p1 { top: 60px; left: -40px; transform: translateZ(10px); }
+        .p2 { bottom: 40px; left: 100px; transform: translateZ(10px); }
+        .p3 { bottom: 10px; left: 160px; transform: translateZ(10px); }
+        .p4 { bottom: 80px; right: -30px; transform: translateZ(10px); }
+        .p5 { top: 80px; right: -20px; transform: translateZ(10px); }
+    </style>
 </head>
 <body>
 
-<div class="sky-bg" id="skyBg"></div>
-<div class="sky-haze"></div>
+    <div class="logo">wrk.</div>
 
-<nav class="chapter-nav" aria-label="Chapter navigation">
-  <button data-target="top" class="active" aria-label="Home"></button>
-  <button data-target="about" aria-label="About"></button>
-  <button data-target="skills" aria-label="Skills"></button>
-  <button data-target="work" aria-label="Work"></button>
-  <button data-target="experience" aria-label="Experience"></button>
-  <button data-target="contact" aria-label="Contact"></button>
-</nav>
+    <div class="scene">
+        <!-- Browser / UI Layout Wireframe -->
+        <div class="browser-window">
+            <div class="browser-header">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="lines"></div>
+            </div>
+            
+            <!-- Card 1: Rice Bowl -->
+            <div class="card" style="grid-column: 1; grid-row: 2;">
+                <div class="bowl"></div>
+                <div class="card-lines"></div>
+            </div>
 
-<!-- ============ PROLOGUE / HERO ============ -->
-<section class="hero" id="top">
-  <div class="scene">
-    <div class="particles-field" id="particles-hero"></div>
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="parallax-layer" data-speed="0.06" d="M0,320 C220,260 380,360 620,300 C860,240 1000,340 1220,290 C1380,260 1500,300 1600,270 L1600,500 L0,500 Z" fill="#D9B49C" opacity="0.7"/>
-      <path class="parallax-layer" data-speed="0.12" d="M0,380 C260,330 420,410 680,360 C920,320 1080,400 1320,350 C1440,330 1520,360 1600,340 L1600,500 L0,500 Z" fill="#C08874" opacity="0.85"/>
-      <path class="parallax-layer" data-speed="0.2" d="M0,440 C300,400 500,460 760,420 C1000,390 1180,450 1420,410 C1500,398 1560,415 1600,405 L1600,500 L0,500 Z" fill="#A9705C"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="glass hero-caption reveal in">
-      <p>Building systems end-to-end — interface to infrastructure — designed for people first.</p>
+            <!-- Card 2: Pink Nigiri -->
+            <div class="card" style="grid-column: 1; grid-row: 3;">
+                <div class="nigiri-pink"></div>
+                <div class="card-lines"></div>
+            </div>
+
+            <!-- Card 3: Maki Rolls -->
+            <div class="card" style="grid-column: 2; grid-row: 3;">
+                <div style="display: flex; gap: 4px;">
+                    <div class="maki-roll"></div>
+                    <div class="maki-roll"></div>
+                </div>
+                <div class="card-lines"></div>
+            </div>
+
+            <!-- Card 4: Yellow/Tamago Nigiri -->
+            <div class="card" style="grid-column: 3; grid-row: 2;">
+                <div class="nigiri-yellow"></div>
+                <div class="card-lines"></div>
+            </div>
+        </div>
+
+        <!-- Isometric Ship Model -->
+        <div class="ship">
+            <div class="flagpole"></div>
+            <div class="flag"></div>
+            <div class="cabin"></div>
+            <div class="deck"></div>
+            <div class="hull"></div>
+        </div>
+
+        <!-- Decorative background elements -->
+        <div class="plant p1"></div>
+        <div class="plant p2"></div>
+        <div class="plant p3"></div>
+        <div class="plant p4"></div>
+        <div class="plant p5"></div>
     </div>
-    <div class="chapter-tag">Software Engineer — Sydney, AU</div>
-    <h1>SHE XIN<em>(Daisy) Lim</em></h1>
-    <div class="hero-role">Full-Stack Software Engineer, based in Sydney — React &amp; TypeScript on the surface, Java &amp; Node.js underneath, PostgreSQL &amp; MongoDB holding it all together.</div>
-  </div>
-  <div class="scroll-cue"><span class="line"></span>Scroll</div>
-</section>
-
-<!-- ============ CH.01 — THE ENGINEER ============ -->
-<section id="about">
-  <div class="scene">
-    <div class="particles-field" id="particles-about"></div>
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse class="parallax-layer" data-speed="0.08" cx="1250" cy="120" rx="360" ry="220" fill="#E8C4A8" opacity="0.4"/>
-      <path class="parallax-layer" data-speed="0.15" d="M0,420 C280,380 460,440 720,400 C960,370 1140,430 1400,390 C1480,378 1550,395 1600,385 L1600,500 L0,500 Z" fill="#8FB89A"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="chapter-tag">01</div>
-    <h2 class="chapter-title">About</h2>
-    <div class="about-grid">
-      <div class="about-text glass reveal">
-        <p>Software engineer with a passion for full-stack development and human-centred design — building products end-to-end, from interface to backend. Experience spans user-friendly frontends in React and TypeScript, backend services in Node.js and Java, and databases like PostgreSQL and MongoDB. I design systems that work for both technical and non-technical users.</p>
-        <p>Completed a Bachelor of Advanced Computing at the University of Sydney and currently undertaking the IT Professional Year Program. Time in hospitality and volunteering sharpened the transferable side of the job too — teamwork, communication, time-management, leadership — the things that make cross-team collaboration actually work.</p>
-      </div>
-      <div class="spec-sheet glass reveal">
-        <div class="spec-row"><div class="spec-key">Focus</div><div class="spec-val">Full-stack engineering &amp; human-centred design</div></div>
-        <div class="spec-row"><div class="spec-key">Frontend</div><div class="spec-val">React, TypeScript, JavaScript, Figma</div></div>
-        <div class="spec-row"><div class="spec-key">Backend</div><div class="spec-val">Node.js, Java, Spring Boot, REST APIs</div></div>
-        <div class="spec-row"><div class="spec-key">Data</div><div class="spec-val">PostgreSQL, MongoDB, SQL, Pandas / NumPy</div></div>
-        <div class="spec-row"><div class="spec-key">Languages</div><div class="spec-val">English (PTE 90/90), Mandarin (native)</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ CH.02 — THE STACK ============ -->
-<section id="skills">
-  <div class="scene">
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path class="parallax-layer" data-speed="0.05" d="M0,340 C240,260 420,300 640,250 C880,196 1080,270 1320,220 C1440,196 1540,220 1600,210 L1600,500 L0,500 Z" fill="#A9C9A0" opacity="0.6"/>
-      <path class="parallax-layer" data-speed="0.1" d="M0,390 C260,330 460,370 700,320 C940,270 1140,340 1380,290 C1470,272 1540,290 1600,280 L1600,500 L0,500 Z" fill="#8AB58F" opacity="0.8"/>
-      <path class="parallax-layer" data-speed="0.16" d="M0,440 C300,400 520,430 780,400 C1020,372 1220,420 1460,390 C1520,382 1560,392 1600,388 L1600,500 L0,500 Z" fill="#6B9B72"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="chapter-tag">02</div>
-    <h2 class="chapter-title">Skills</h2>
-    <div class="stack">
-      <div class="ridge-layer glass reveal">
-        <div class="ridge-name">Layer 01<b>Client / Interface</b></div>
-        <div class="pills"><span class="pill">React</span><span class="pill">TypeScript</span><span class="pill">JavaScript</span><span class="pill">HTML / CSS</span><span class="pill">Figma</span></div>
-      </div>
-      <div class="ridge-layer glass reveal">
-        <div class="ridge-name">Layer 02<b>Service / API</b></div>
-        <div class="pills"><span class="pill">Node.js</span><span class="pill">Express.js</span><span class="pill">Java</span><span class="pill">Spring Boot</span><span class="pill">REST APIs</span><span class="pill">Microservices</span><span class="pill">RabbitMQ</span></div>
-      </div>
-      <div class="ridge-layer glass reveal">
-        <div class="ridge-name">Layer 03<b>Data / Intelligence</b></div>
-        <div class="pills"><span class="pill">PostgreSQL</span><span class="pill">MongoDB</span><span class="pill">SQL</span><span class="pill">Python</span><span class="pill">Pandas</span><span class="pill">NumPy</span><span class="pill">TensorFlow / Keras</span><span class="pill">R</span></div>
-      </div>
-      <div class="ridge-layer glass reveal">
-        <div class="ridge-name">Layer 04<b>Infra / Delivery</b></div>
-        <div class="pills"><span class="pill">Git</span><span class="pill">Docker</span><span class="pill">Jenkins</span><span class="pill">CI/CD</span><span class="pill">Bitbucket</span><span class="pill">Linux</span><span class="pill">JUnit</span><span class="pill">Pytest</span><span class="pill">Postman</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ CH.03 — FIELD NOTES ============ -->
-<section id="work">
-  <div class="scene">
-    <div class="particles-field" id="particles-work"></div>
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M100,120 C400,220 700,60 1000,180 C1250,270 1400,140 1550,200" stroke="rgba(63,122,114,0.35)" stroke-width="1.5" fill="none"/>
-      <path class="parallax-layer" data-speed="0.1" d="M0,420 C300,380 520,430 780,400 C1020,372 1220,420 1460,390 C1520,382 1560,392 1600,388 L1600,500 L0,500 Z" fill="#C9A98F" opacity="0.7"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="chapter-tag">03</div>
-    <h2 class="chapter-title">Selected Work</h2>
-    <div class="projects">
-
-      <article class="project glass reveal" tabindex="0">
-        <div class="project-top">
-          <div class="project-title"><span class="status-dot"></span><h3>Distributed E-Commerce Microservices System</h3></div>
-          <span class="project-toggle">+</span>
-        </div>
-        <div class="project-stack">Java · Spring Boot · PostgreSQL · RabbitMQ · HTML/JS</div>
-        <div class="project-diagram">
-          <span class="svc">Store</span><span class="svc-arrow">⇄</span>
-          <span class="svc">Bank</span><span class="svc-arrow">⇄</span>
-          <span class="svc">Delivery</span><span class="svc-arrow">⇄</span>
-          <span class="svc">Email</span>
-        </div>
-        <div class="project-body">
-          <div class="project-body-inner">
-            <ul>
-              <li>Architected a distributed microservices system with REST-based inter-service communication, supporting end-to-end order placement, payment validation, inventory management, and delivery tracking.</li>
-              <li>Designed separate PostgreSQL databases per microservice, keeping each service independent while maintaining data consistency across the system.</li>
-              <li>Implemented RabbitMQ message queuing for asynchronous inter-service communication, improving resilience and decoupling services during partial outages.</li>
-              <li>Built a responsive HTML/JavaScript customer frontend with authentication, order management, and real-time status tracking.</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-      <article class="project glass reveal" tabindex="0">
-        <div class="project-top">
-          <div class="project-title"><span class="status-dot"></span><h3>Volatility &amp; Quoting Strategy Dashboard</h3></div>
-          <span class="project-toggle">+</span>
-        </div>
-        <div class="project-stack">Python · Pandas · Parquet · Streamlit · LSTM (TensorFlow/Keras)</div>
-        <div class="metrics">
-          <div class="metric"><b>35.5M</b><span>Order-book rows</span></div>
-          <div class="metric"><b>0.000045</b><span>RMSE</span></div>
-          <div class="metric"><b>0.342</b><span>Q-LIKE</span></div>
-        </div>
-        <div class="project-body">
-          <div class="project-body-inner">
-            <ul>
-              <li>Transformed 35.5M rows of raw high-frequency limit order book data into structured hourly trading windows, powering an LSTM-based volatility forecasting pipeline.</li>
-              <li>Built and deployed an interactive Streamlit dashboard, surfacing short-term volatility signals for both technical and non-technical stakeholders.</li>
-              <li>Engineered a Parquet-based data pipeline with batch loading and caching, reducing load times to near-instant at scale.</li>
-              <li>Designed a quoting strategy module comparing current vs. model-predicted quotes — mid price, spread, bid, and ask — to show how short-term ML forecasts can inform quoting decisions.</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-      <article class="project glass reveal" tabindex="0">
-        <div class="project-top">
-          <div class="project-title"><span class="status-dot"></span><h3>OldPhoneDeals — Full-Stack Marketplace</h3></div>
-          <span class="project-toggle">+</span>
-        </div>
-        <div class="project-stack">React · TypeScript · Vite · Tailwind CSS · Express.js · MongoDB · JWT</div>
-        <div class="project-diagram">
-          <span class="svc">Client SPA</span><span class="svc-arrow">→</span>
-          <span class="svc">Express API</span><span class="svc-arrow">→</span>
-          <span class="svc">MongoDB Atlas</span>
-        </div>
-        <div class="project-body">
-          <div class="project-body-inner">
-            <ul>
-              <li>Built the core Single Page Application architecture and page states (Home, Search, Item) for a full-stack used phone marketplace.</li>
-              <li>Implemented search and filtering — title-based search, brand dropdown filtering, and a price-range slider.</li>
-              <li>Developed logged-in user features: reviews, cart, and wishlist functionality.</li>
-              <li>Structured the MongoDB database using Mongoose models to support phone listings and user data.</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ CH.04 — THE PATH ============ -->
-<section id="experience">
-  <div class="scene">
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M-50,480 C200,400 250,300 500,260 C750,220 800,340 1050,300 C1300,260 1350,150 1650,120" stroke="rgba(185,104,62,0.35)" stroke-width="2" fill="none" stroke-dasharray="4 10"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="chapter-tag">04</div>
-    <h2 class="chapter-title">Experience</h2>
-    <div class="timeline glass" style="padding:10px 8px;">
-
-      <div class="tl-item reveal">
-        <div class="tl-when">Jun 2026 — Present</div>
-        <div class="tl-role">ACS Professional Year Program (IT)</div>
-        <div class="tl-org">Australian Computer Society</div>
-        <p>Employability training in Australian workplace culture — interview preparation, professional workplace writing, and workplace professionalism — to build readiness for the Australian IT sector.</p>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-when">Jan 2025 — Present</div>
-        <div class="tl-role">Retail Assistant, Volunteer</div>
-        <div class="tl-org">Australian Red Cross, Broadway</div>
-        <p>Supporting the Red Cross's charitable retail operations within a community-driven team, helping fund humanitarian and community support programs.</p>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-when">Jul 2025 — Present</div>
-        <div class="tl-role">Team Member</div>
-        <div class="tl-org">Yo-Chi, Newtown</div>
-        <ul>
-          <li>Delivered exceptional customer service in a fast-paced environment — 5-time Star of the Month.</li>
-          <li>Trained and mentored 10+ new team members on daily duties and service standards.</li>
-          <li>Operated POS with accuracy and speed during high-volume periods, keeping queue times low.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-when">Jul 2024 — Nov 2024</div>
-        <div class="tl-role">Software Developer Intern</div>
-        <div class="tl-org">InSite Project Solutions</div>
-        <ul>
-          <li>Engineered the still image capture feature for rpicam-mjpeg, a C++ Raspberry Pi multi-stream camera system with a GUI web interface — shipped as part of the final open-source release.</li>
-          <li>Ensured release stability through test-driven development and automated Python testing.</li>
-          <li>Delivered features in an Agile/XP environment — sprint planning, daily standups, retrospectives, pair programming.</li>
-          <li>Recognised with a formal Acknowledgement of Contribution for exceeding project goals.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-when">Feb 2022 — May 2026</div>
-        <div class="tl-role">Bachelor of Advanced Computing</div>
-        <div class="tl-org">University of Sydney — Major: CS · Minor: Computational Data Science</div>
-        <p>Graduating with a Distinction WAM.</p>
-      </div>
-
-    </div>
-
-    <div class="badges reveal">
-      <div class="badge glass"><span class="badge-mark">◆</span> Distinction WAM — B. Advanced Computing</div>
-      <div class="badge glass"><span class="badge-mark">◆</span> 5× Chi Champion — Yo-Chi Newtown</div>
-      <div class="badge glass"><span class="badge-mark">◆</span> Acknowledgement of Contribution — InSite</div>
-      <div class="badge glass"><span class="badge-mark">◆</span> PTE Academic 90/90</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ EPILOGUE / CONTACT ============ -->
-<section id="contact">
-  <div class="scene">
-    <div class="particles-field" id="particles-contact"></div>
-    <svg viewBox="0 0 1600 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="1300" cy="140" r="140" fill="rgba(217,164,65,0.28)"/>
-      <path class="parallax-layer" data-speed="0.08" d="M0,400 C280,350 480,410 740,370 C980,335 1160,400 1400,360 C1480,346 1550,362 1600,352 L1600,500 L0,500 Z" fill="#C79385" opacity="0.6"/>
-    </svg>
-  </div>
-  <div class="wrap content">
-    <div class="chapter-tag">05</div>
-    <div class="contact-inner glass reveal">
-      <h2>Let's build something people actually want to use.</h2>
-      <div class="contact-links">
-        <a class="contact-link" href="mailto:shexinlim@gmail.com">✉ shexinlim@gmail.com</a>
-        <a class="contact-link" href="tel:+61435757129">☎ +61 435 757 129</a>
-        <a class="contact-link" href="https://linkedin.com/in/shexinlim" target="_blank" rel="noopener">↗ linkedin.com/in/shexinlim</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="wrap">
-  <footer>
-    <span>© 2026 She Xin (Daisy) Lim — Sydney, NSW</span>
-    <span>Built end-to-end, same as everything above.</span>
-  </footer>
-</div>
-
-<script>
-  // ---- Sky gradient: dusk -> dawn across full scroll ----
-  const stops = [
-    {t:0.00, top:[237,228,211], mid:[217,194,174], hor:[169,195,182]},
-    {t:0.22, top:[234,224,203], mid:[212,183,163],  hor:[164,187,168]},
-    {t:0.48, top:[240,231,214], mid:[201,178,168],  hor:[143,178,166]},
-    {t:0.74, top:[244,235,218], mid:[214,175,152],  hor:[176,196,163]},
-    {t:1.00, top:[249,240,222], mid:[228,192,159],  hor:[201,207,171]}
-  ];
-  function lerp(a,b,t){ return a + (b-a)*t; }
-  function lerpColor(c1,c2,t){
-    return [Math.round(lerp(c1[0],c2[0],t)), Math.round(lerp(c1[1],c2[1],t)), Math.round(lerp(c1[2],c2[2],t))];
-  }
-  function rgbStr(c){ return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
-
-  const skyBg = document.getElementById('skyBg');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function updateSky(progress){
-    let a = stops[0], b = stops[stops.length-1];
-    for(let i=0;i<stops.length-1;i++){
-      if(progress >= stops[i].t && progress <= stops[i+1].t){
-        a = stops[i]; b = stops[i+1];
-        break;
-      }
-    }
-    const span = (b.t - a.t) || 1;
-    const localT = (progress - a.t) / span;
-    const top = rgbStr(lerpColor(a.top, b.top, localT));
-    const mid = rgbStr(lerpColor(a.mid, b.mid, localT));
-    const hor = rgbStr(lerpColor(a.hor, b.hor, localT));
-    skyBg.style.background = 'linear-gradient(to bottom, ' + top + ' 0%, ' + mid + ' 55%, ' + hor + ' 100%)';
-  }
-
-  const parallaxLayers = document.querySelectorAll('.parallax-layer');
-
-  let ticking = false;
-  function onScroll(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const doc = document.documentElement;
-      const scrollTop = window.scrollY;
-      const maxScroll = doc.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0;
-      updateSky(progress);
-
-      if(!reduceMotion){
-        parallaxLayers.forEach(layer => {
-          const speed = parseFloat(layer.dataset.speed || '0.1');
-          const offset = scrollTop * speed;
-          layer.style.transform = 'translateY(' + Math.min(offset, 60) + 'px)';
-        });
-      }
-      ticking = false;
-    });
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  updateSky(0);
-
-  // ---- Chapter nav active state + click-to-scroll ----
-  const navButtons = document.querySelectorAll('.chapter-nav button');
-  const chapterSections = Array.from(navButtons).map(b => document.getElementById(b.dataset.target));
-  navButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = document.getElementById(btn.dataset.target);
-      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
-    });
-  });
-  const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const idx = chapterSections.indexOf(entry.target);
-        if(idx > -1){
-          navButtons.forEach(b => b.classList.remove('active'));
-          navButtons[idx].classList.add('active');
-        }
-      }
-    });
-  }, {threshold:0.5});
-  chapterSections.forEach(s => { if(s) navObserver.observe(s); });
-
-  // ---- Scroll reveal ----
-  const revealEls = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        entry.target.classList.add('in');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, {threshold:0.12});
-  revealEls.forEach(el => revealObserver.observe(el));
-
-  // ---- Expandable project cards ----
-  document.querySelectorAll('.project').forEach(card => {
-    const toggle = () => card.classList.toggle('open');
-    card.addEventListener('click', toggle);
-    card.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
-    });
-  });
-
-  // ---- Floating particles ----
-  if(!reduceMotion){
-    const fields = ['particles-hero','particles-about','particles-work','particles-contact'];
-    fields.forEach(id => {
-      const field = document.getElementById(id);
-      if(!field) return;
-      const count = 10;
-      for(let i=0;i<count;i++){
-        const mote = document.createElement('div');
-        mote.className = 'mote';
-        const size = 2 + Math.random()*3;
-        const useAmber = Math.random() > 0.5;
-        mote.style.width = size + 'px';
-        mote.style.height = size + 'px';
-        mote.style.left = (Math.random()*100) + '%';
-        mote.style.top = (30 + Math.random()*60) + '%';
-        mote.style.background = useAmber ? '#B9683E' : '#3F7A72';
-        mote.style.boxShadow = '0 0 6px ' + (useAmber ? '#B9683E' : '#3F7A72');
-        mote.style.animationDuration = (6 + Math.random()*8) + 's';
-        mote.style.animationDelay = (Math.random()*6) + 's';
-        field.appendChild(mote);
-      }
-    });
-  }
-</script>
 
 </body>
 </html>
